@@ -353,7 +353,7 @@ final class RSocketReactiveSwiftTests: XCTestCase {
         // checking if connection is active
         XCTAssertFalse(reactiveSwiftClient.isDisposed)
         // closing connection using dispose method
-        reactiveSwiftClient.dispose()
+        try reactiveSwiftClient.shutdown().first()?.get()
         // checking if connection is inactive
         XCTAssertTrue(reactiveSwiftClient.isDisposed)
     }

@@ -29,6 +29,8 @@ class CoreClientTests: XCTestCase {
         XCTAssertNotNil(coreClient)
         // checking if connection is active
         XCTAssertTrue(channel.isActive)
+        // checking if connection is active
+        coreClient?.shutDown()
         // Deinitializing core client instance
         coreClient = nil
         // checking if connection is inactive
