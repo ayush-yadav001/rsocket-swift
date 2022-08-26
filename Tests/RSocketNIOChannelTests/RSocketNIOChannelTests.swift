@@ -37,6 +37,8 @@ class RSocketNIOChannelTests: XCTestCase {
         // creating connection with invalid url
         let bootstrap = clientBootStrap?.connect(to: WSTransport.Endpoint(url: uri, additionalHTTPHeader: headerDict),
                                                  payload: Payload(metadata: "", data: ""), responder: TestRSocket())
+        let bootstrapsSecondTry = clientBootStrap?.connect(to: WSTransport.Endpoint(url: uri, additionalHTTPHeader: headerDict),
+                                                 payload: Payload(metadata: "", data: ""), responder: TestRSocket())
         // catch error on future fails
         bootstrap?.whenFailure({ _ in
             invalidUrlErrorCatch.fulfill()
