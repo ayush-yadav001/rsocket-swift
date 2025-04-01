@@ -15,8 +15,8 @@
  */
 
 /**
- This file contains examples of the `Coder`, `Encoder` and `Decoder` API. 
- All those examples should eventually be moved to documentation and/or tests. 
+ This file contains examples of the `Coder`, `Encoder` and `Decoder` API.
+ All those examples should eventually be moved to documentation and/or tests.
  For now they are here to make sure we do not accidentally break any public API during development.
  */
 
@@ -51,8 +51,8 @@ fileprivate enum Requests {
             .encodeStaticMetadata("metrics", using: RoutingEncoder())
             .encodeData(using: JSONDataEncoder(type: Metrics.self))
     }
-    /// Same as above but gives the call site the option to encode additional dynamic metadata 
-    static let metrics3 = FireAndForget<([CompositeMetadata], Metrics)> {
+    /// Same as above but gives the call site the option to encode additional dynamic metadata
+    static let metrics3 = FireAndForget<((),Metrics)> {
         Encoder()
             .useCompositeMetadata()
             .encodeStaticMetadata("metrics", using: RoutingEncoder())
@@ -67,7 +67,6 @@ fileprivate enum Requests {
     static let priceRequest1 = RequestResponse<String, Double> {
         Encoder()
             .useCompositeMetadata()
-            .encodeStaticMetadata("price", using: RoutingEncoder())
             .encodeStaticMetadata([.applicationJson], using: AcceptableDataMIMETypeEncoder())
             .encodeData(using: JSONDataEncoder(type: Stock.self))
             .mapData(Stock.init(isin:))
@@ -76,7 +75,7 @@ fileprivate enum Requests {
             .decodeData(using: JSONDataDecoder(type: Price.self))
             .mapData(\.price)
     }
-    /// Same as above but we do no longer need to explicitly encode the Acceptable Data MIME Type. 
+    /// Same as above but we do no longer need to explicitly encode the Acceptable Data MIME Type.
     /// This is because we use the `Coder` convenience API which is a thin wrapper around an `Encoder` and `Decoder`.
     /// `Coder.decodeData(decoder:)` takes multiple decoders and automatically encodes their MIME Type as Acceptable Data MIME Type Metadata.
     /// It also looks for Data MIME Type and the Connection MIME Type and choose the correct decoder during decoding.
@@ -85,23 +84,21 @@ fileprivate enum Requests {
             .useCompositeMetadata()
             .encodeStaticMetadata("price", using: RoutingEncoder())
             .encodeData(using: JSONDataEncoder(type: ISIN.self).map(ISIN.init(isin:)))
-            .decodeData {
-                JSONDataDecoder(type: Price.self).map(\.price)
-            }
+            .decodeData (using:JSONDataDecoder(type: Price.self).map(\.price))
     }
     
     /// Same as above but this time the encoder also encodes the MIME Type of the data as Date MIME Type Metadata because we use the `encodeData(encoder:)` method which can take multiple encoders. The call side need to specify which encoding it wants to use.
-    static let priceRequest3 = RequestResponse<(MIMEType, String), Double> {
+    static let priceRequest3 = RequestResponse<(String), Double> {
         Coder()
             .useCompositeMetadata()
             .encodeStaticMetadata("price", using: RoutingEncoder())
-            .encodeData {
+            .encodeData (using:
                 JSONDataEncoder(type: ISIN.self).map(ISIN.init(isin:))
-            }
-            .decodeData {
+            )
+            .decodeData (using:
                 JSONDataDecoder(type: Price.self)
                     .map(\.price)
-            }
+            )
     }
     /// Works with `RequestStream` and `RequestChannel` too
     static let priceStream1 = RequestStream<ISIN, Price> {
