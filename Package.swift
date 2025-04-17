@@ -26,11 +26,11 @@ let package = Package(
         .executable(name: "vanilla-client-example", targets: ["VanillaClientExample"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", from: "6.6.0"),
-        .package(url: "https://github.com/apple/swift-nio", from: "2.32.1"),
-        .package(url: "https://github.com/apple/swift-nio-extras", from: "1.8.0"),
-        .package(url: "https://github.com/apple/swift-nio-transport-services", from: "1.9.2"),
-        .package(url: "https://github.com/apple/swift-nio-ssl", from: "2.10.4"),
+        .package(url: "https://github.com/ReactiveCocoa/ReactiveSwift.git", from: "7.2.0"),
+        .package(url: "https://github.com/apple/swift-nio", from: "2.76.1"),
+        .package(url: "https://github.com/apple/swift-nio-extras", from: "1.24.1"),
+        .package(url: "https://github.com/apple/swift-nio-transport-services", from: "1.23.0"),
+        .package(url: "https://github.com/apple/swift-nio-ssl", from: "2.29.0"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.4.0"),
     ],
     targets: [
